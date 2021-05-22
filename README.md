@@ -35,4 +35,4 @@ remote server들에게 data를 요청하는 grpc call을 보내고 받은 return
 
 ## 4. Running Video
 
-https://user-images.githubusercontent.com/68216852/119236565-130a3000-bb73-11eb-9cad-05b1390759e6.mp4
+https://user-images.githubusercontent.com/68216852/119236618-6aa89b80-bb73-11eb-89bd-8c46c4e391a6.mp4
