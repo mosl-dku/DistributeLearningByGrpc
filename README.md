@@ -6,8 +6,8 @@
 
 위 조건을 만족시키기 위해, data가 저장되어 있는 remote server에서 딥러닝 model의 일부 layer를 통과 시켜 data가 어떤 의미를 가지는지 숨기고 추가적으로 중앙(main server)에서 실행될 학습량을 줄일 수 있다. 
 
-Data가 저장되어 있고 딥러닝 model의 일부 layer를 통과 시켜 main server에 전송하는 server  ->  remote server
-Remote server들에서 받은 data를 merge해 나머지 model의 layer를 완료하여 최종 모델을 생성하고 평가하는 server  ->  mains server
+Data가 저장되어 있고 딥러닝 model의 일부 layer를 통과 시켜 main server에 전송하는 server  ->  **remote server**
+Remote server들에서 받은 data를 merge해 나머지 model의 layer를 완료하여 최종 모델을 생성하고 평가하는 server  ->  **main server**
 
 #### 1. Model Architecture
 
