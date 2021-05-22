@@ -16,10 +16,10 @@ Remote server들에서 받은 data를 merge해 나머지 model의 layer를 완�
 
 ### Version
 
-사용한 server들의 linux version  
+server들의 linux version  
 ->Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-70-generic x86_64)
 
-사용한 Protobuf version  
+Protobuf version  
 ->libprotoc 3.13.0
 
 ## 1. Model Architecture
