@@ -23,8 +23,12 @@ Remote server들에서 받은 data를 merge해 나머지 model의 layer를 완�
 
 ## 2. Remote server(Grpc server)
 
+data들이 저장되어 있는 server이며 grpc server을 실행시켜 main server로 부터 call을 기다리는 server.
+
 
 ## 3. Main Server(Grpc call)
+
+remote server들에게 data를 요청하는 grpc call을 보내고 받은 return 값들을 merge하며 나머지 model를 학습하는 server
 
 
 ## 4. Running Video
