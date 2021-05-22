@@ -1,5 +1,7 @@
 # DistributeLearningByGrpc
 
+분산 되어 있는 data들을 합산하여 
+
 
 
 
