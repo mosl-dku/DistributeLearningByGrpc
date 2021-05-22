@@ -14,6 +14,9 @@ Data가 저장되어 있고 딥러닝 model의 일부 layer를 통과 시켜 mai
 Remote server들에서 받은 data를 merge해 나머지 model의 layer를 완료하여 최종 모델을 생성하고 평가하는 server  
 ->  **main server**
 
+
+프로젝트에서 사용한 dataset들은 업로드 하지 않았음
+
 ### Version
 
 server들의 linux version  
