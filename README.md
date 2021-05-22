@@ -12,9 +12,18 @@ Data가 저장되어 있고 딥러닝 model의 일부 layer를 통과 시켜 mai
 Remote server들에서 받은 data를 merge해 나머지 model의 layer를 완료하여 최종 모델을 생성하고 평가하는 server  
 ->  **main server**
 
+#### Version
+
+사용한 server들의 linux version  
+->Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-70-generic x86_64)
+
+사용한 Protobuf version  
+->libprotoc 3.13.0
+
 ## 1. Model Architecture
 
 ![12321](https://user-images.githubusercontent.com/68216852/119232348-e7ca1580-bb5f-11eb-91eb-2535691db9fc.png)
+
 
 #### Architecture 동작 순서
 1. Remote Server에서 grpc server를 작동한다. ( grpc server는 "grpc call"이 들어오면 자신이 가지고 있는 data를 model의 일부 layer를 통과 시키고 그 값을 return 해주는 function이 내장되어 있다.
