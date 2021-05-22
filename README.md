@@ -10,7 +10,7 @@
 Data가 저장되어 있고 딥러닝 model의 일부 layer를 통과 시켜 main server에 전송하는 server  ->  **remote server**  
 Remote server들에서 받은 data를 merge해 나머지 model의 layer를 완료하여 최종 모델을 생성하고 평가하는 server  ->  **main server**
 
-#### 1. Model Architecture
+### 1. Model Architecture
 
 ![12321](https://user-images.githubusercontent.com/68216852/119232348-e7ca1580-bb5f-11eb-91eb-2535691db9fc.png)
 
@@ -21,10 +21,10 @@ Architecture 동작 순서
 4. Main server에서 모든 remote server에 대한 return 값이 도착하면 모든 return 값을 merge 하여 딥러닝 model의 나머지 부분 학습을 진행한다.
 
 
-#### 2. Remote server(Grpc server)
+### 2. Remote server(Grpc server)
 
 
-#### 3. Main Server(Grpc call)
+### 3. Main Server(Grpc call)
 
 
-#### 4. Running Video
+### 4. Running Video
