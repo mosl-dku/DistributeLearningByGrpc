@@ -46,6 +46,7 @@ data들이 저장되어 있는 server이며 grpc server을 실행시켜 main ser
 
 remote server들에게 data를 요청하는 grpc call을 보내고 받은 return 값들을 merge하며 나머지 model를 학습하는 server
 
+
 ‹‹‹
 def run1():
         with grpc.insecure_channel('172.25.244.53:50051', options=[('grpc.max_send_message_length', 1024 * 1024 * 300), ('grpc.max_receive_message_length', 1024 * 1024 * 300), ],) as channel:
