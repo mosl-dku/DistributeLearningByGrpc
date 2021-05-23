@@ -37,19 +37,94 @@ Protobuf version
 4. Main server에서 모든 remote server에 대한 return 값이 도착하면 모든 return 값을 merge 하여 딥러닝 model의 나머지 부분 학습을 진행한다.
 
 
-## 2. Remote server(Grpc server)
+## 2. Protobuf
+
+```
+syntax = "proto3";
+
+service layer2_out{
+        rpc request(DL_request) returns (DL_response){}
+}
+
+message DL_request{
+        int32 state = 1;
+
+}
+
+message DL_response{
+        bytes x_train = 1;
+        bytes y_train = 2;
+}
+```
+
+Grpc통신에서 사용할 message에 element과 service를 proto file에 정의한다. 이후 protoc file로 
+
+
+## 3. Remote server(Grpc server)
+
 
 data들이 저장되어 있는 server이며 grpc server을 실행시켜 main server로 부터 call을 기다리는 server.
 
+### Return function
+```
+class layer2_out(service_pb2_grpc.layer2_outServicer):
 
-## 3. Main Server(Grpc call)
+    def request(self, request, context):
+        optimizer = optimizers.Adam(0.01)
+        early_stop = callbacks.EarlyStopping(monitor='val_mean_squared_logarithmic_error', patience=10)
+
+        EPOCHS = 200
+        rmse_result = list()
+
+        data = pd.read_csv('1.csv')
+        data =data.dropna(axis=1)
+
+        data = data.drop(['DATE'], axis=1)
+        data = data.rename(columns= {'L3008' : 'TC',
+                                    'L3062' : 'HDL-C',
+                                    'L3061' : 'TG',
+                                    'L3068' : 'LDL-C'})
+
+        x_train = data
+        y_train = x_train.pop('LDL-C')
+
+        model = makemodel.test_base(x_train)
+        model.compile(loss='mse', optimizer=optimizer, metrics=['mean_squared_logarithmic_error'])
+
+        mergedmodel = Model(inputs=model.input, outputs=model.get_layer('layer2').output)
+
+
+        x_train_passed = mergedmodel.predict(x_train)
+
+
+        bx = np.array(x_train_passed,dtype=np.float32).tobytes()
+        by = np.array(y_train,dtype=np.float32).tobytes()
+        return service_pb2.DL_response(x_train=bx,y_train=by)
+```
+proto파일을 컴파일하여 생성된 pb2_grpc에 선언되어있는 outServicer를 상속받아 request function을 생성한다. 이 function안에서 remote server에 저장되어있는 data를 processing 하여 model의 layer2 까지 통과하고 통과한 x_train 값과 y_train 값을 return 한다. main server에 return 값을 전송하기 위해 data 형태를 byte 형식으로 바꾼다. 
+
+
+### Run Grpc Server  
+```
+def serve():
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10),options=[('grpc.max_send_message_length', 1024 * 1024 * 200),('grpc.max_receive_message_length', 1024 * 1024 * 200),],)
+    service_pb2_grpc.add_layer2_outServicer_to_server(layer2_out(), server)
+    server.add_insecure_port('172.25.244.2:50051')
+    server.start()
+    server.wait_for_termination()
+```  
+Grpc server를 구성하고 실행하는 function. server를 구성할때 옵션 값 options=[('grpc.max_send_message_length', 1024 * 1024 * 200),('grpc.max_receive_message_length', 1024 * 1024 * 200),]을 통해 Grpc 통신을 통해 전송할 수 있는 message의 byte 수를 조정한다.
+
+## 4. Main Server(Grpc call)
+
 
 remote server들에게 data를 요청하는 grpc call을 보내고 받은 return 값들을 merge하며 나머지 model를 학습하는 server
 
 
+### Call function
 ```  
 def run1():
-        with grpc.insecure_channel('172.25.244.53:50051', options=[('grpc.max_send_message_length', 1024 * 1024 * 300), ('grpc.max_receive_message_length', 1024 * 1024 * 300), ],) as channel:
+        with grpc.insecure_channel('ip:port', options=[('grpc.max_send_message_length', 1024 * 1024 * 300), ('grpc.max_receive_message_length', 1024 * 1024 * 300), ],) as channel:
                 stub = service_pb2_grpc.layer2_outStub(channel)
                 response = stub.request(service_pb2.DL_request(state=1))
                 xb_train = np.frombuffer(response.x_train, dtype=np.float32)
@@ -60,8 +135,39 @@ def run1():
                 return x_train, y_train
 ```
 
+Remote server에게 Grpc call을 보내고 call에 대한 return 값을 return 하는 function이다. remote server에서 전송시 byte 형태로 바꾸어서 전송하여서 다시 data type을 바꾸고 data type를 바꾸는 과정에서 np.array의 shape이 1차원으로 바꾸기 때문에 이에 대해서 shape을 조정하는 과정을 거친다.
 
+### Bring Testset function
+```
+def testset():
+        optimizer = optimizers.Adam(0.01)
+        early_stop = callbacks.EarlyStopping(
+    monitor='val_mean_squared_logarithmic_error', patience=10)
 
-## 4. Running Video
+        EPOCHS = 200
+        rmse_result = list()
+
+        data = pd.read_csv('testset.csv')
+        data = data.dropna(axis=1)
+
+        data = data.drop(['DATE'], axis=1)
+        data = data.rename(columns= {'L3008': 'TC', 'L3062': 'HDL-C', 'L3061' : 'TG', 'L3068' : 'LDL-C'})
+
+        x_test = data
+        y_test = x_test.pop('LDL-C')
+
+        model = makemodel.test_base(x_test)
+        model.compile(loss='mse', optimizer=optimizer, metrics=['mean_squared_logarithmic_error'])
+
+        mergedmodel = Model(inputs=model.input, outputs=model.get_layer('layer2').output)
+        mergedmodel.summary()
+
+        x_test_passed = mergedmodel.predict(x_test)
+        return x_test_passed, y_test
+```
+
+model을 test하는데에 필요한 test_data를 만드는 function이다. 
+
+## 5. Running Video
 
 https://user-images.githubusercontent.com/68216852/119236618-6aa89b80-bb73-11eb-89bd-8c46c4e391a6.mp4
