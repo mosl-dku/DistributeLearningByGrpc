@@ -46,6 +46,20 @@ data들이 저장되어 있는 server이며 grpc server을 실행시켜 main ser
 
 remote server들에게 data를 요청하는 grpc call을 보내고 받은 return 값들을 merge하며 나머지 model를 학습하는 server
 
+‹‹‹
+def run1():
+        with grpc.insecure_channel('172.25.244.53:50051', options=[('grpc.max_send_message_length', 1024 * 1024 * 300), ('grpc.max_receive_message_length', 1024 * 1024 * 300), ],) as channel:
+                stub = service_pb2_grpc.layer2_outStub(channel)
+                response = stub.request(service_pb2.DL_request(state=1))
+                xb_train = np.frombuffer(response.x_train, dtype=np.float32)
+                yb_train = np.frombuffer(response.y_train, dtype=np.float32)
+
+                x_train = xb_train.reshape(-1, 128)
+                y_train = pd.Series(yb_train, name='LDL-C')
+                return x_train, y_train
+‹‹‹
+
+
 
 ## 4. Running Video
 
