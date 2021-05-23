@@ -15,11 +15,11 @@ Remote server들에서 받은 data를 merge해 나머지 model의 layer를 완�
 ->  **main server**
 
 
-프로젝트에서 사용한 dataset들은 업로드 하지 않았음
+>>프로젝트에서 사용한 dataset들은 업로드 하지 않았음
 
 ### Version
 
-server들의 linux version  
+server linux version  
 ->Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-70-generic x86_64)
 
 Protobuf version  
