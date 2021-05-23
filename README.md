@@ -57,7 +57,7 @@ message DL_response{
 }
 ```
 
-Grpc통신에서 사용할 message에 element과 service를 proto file에 정의한다. 이후 protoc file로 
+Grpc통신에서 사용할 message에 element과 service를 proto file에 정의한다. 이후 protoc file 을 컴파일하여 grpc관련 function을 생성할 때 참조하는 service_pb2파일과 service_pb2_grpc 파일을 생성한다. 
 
 
 ## 3. Remote server(Grpc server)
