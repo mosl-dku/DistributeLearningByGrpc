@@ -15,11 +15,11 @@ Remote server들에서 받은 data를 merge해 나머지 model의 layer를 완�
 ->  **main server**
 
 
-프로젝트에서 사용한 dataset들은 업로드 하지 않았음
+>>프로젝트에서 사용한 dataset들은 업로드 하지 않았음
 
 ### Version
 
-server들의 linux version  
+server linux version  
 ->Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-70-generic x86_64)
 
 Protobuf version  
@@ -57,7 +57,7 @@ message DL_response{
 }
 ```
 
-Grpc통신에서 사용할 message에 element과 service를 proto file에 정의한다. 이후 protoc file 을 컴파일하여 grpc관련 function을 생성할 때 참조하는 service_pb2파일과 service_pb2_grpc 파일을 생성한다. 
+Grpc통신에서 사용할 message에 element과 service를 proto file에 정의한다. 이후 proto file 을 컴파일하여 grpc관련 function을 생성할 때 참조하는 service_pb2파일과 service_pb2_grpc 파일을 생성한다. 
 
 
 ## 3. Remote server(Grpc server)
