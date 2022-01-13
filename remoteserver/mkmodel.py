@@ -89,37 +89,68 @@ class makemodel:
         model.add(Dense(2, activation='relu', input_shape=[input_data.shape[1]]))
         model.add(Dropout(0,1))
         model.add(Dense(1))
-        
+      
         return model
+    def test_layer2(input_data):
+        model = Sequential()
+        model.add(Dense(128, input_shape=[input_data.shape[1]],kernel_initializer='he_normal', name='layer1'))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Dropout(0.1, name='layer2'))
+
+        return model
+
     
     def test_base(input_data):
         model = Sequential()
-        model.add(Dense(128, input_shape=[input_data.shape[1]], name='layer1'))
+        model.add(Dense(128, input_shape=[input_data.shape[1]],kernel_initializer='he_normal', name='layer1'))
         model.add(LeakyReLU(alpha=0.01))
         model.add(Dropout(0.1, name='layer2'))
-        model.add(Dense(64, name='layer3'))
+        model.add(Dense(64,kernel_initializer='he_normal', name='layer3'))
         model.add(LeakyReLU(alpha=0.01))
         model.add(Dropout(0.1, name='layer4'))
-        model.add(Dense(16, name='layer5'))
+        model.add(Dense(16,kernel_initializer='he_normal', name='layer5'))
         model.add(LeakyReLU(alpha=0.01))
         model.add(Dropout(0.1, name='layer6'))
-        model.add(Dense(2, name='layer7'))
+        model.add(Dense(2,kernel_initializer='he_normal', name='layer7'))
         model.add(LeakyReLU(alpha=0.01))
-        model.add(Dense(1, name='final_layer'))
+        model.add(Dense(1,kernel_initializer='he_normal',  name='final_layer'))
                 
         return model
-    
-    def test_L1out(input_data):
-        model = Sequential()        
-        model.add(Dense(64, input_shape=[input_data.shape[1]], name='layer1'))
-        model.add(LeakyReLU(alpha=0.01))
-        model.add(Dropout(0.1, name='layer2'))
-        model.add(Dense(16, name='layer3'))
-        model.add(LeakyReLU(alpha=0.01))
-        model.add(Dropout(0.1, name='layer4'))        
-        model.add(Dense(2, name='layer5'))
+
+    def test_L3out(input_data):
+        model = Sequential()
+        model.add(Dense(2, input_shape=[input_data.shape[1]], name='layer1'))
+        model.add(Dense(2, name='layer2'))
         model.add(LeakyReLU(alpha=0.01))
         model.add(Dense(1, name='final_layer'))
+
+        return model
+
+
+    def test_L2out(input_data):
+        model = Sequential()
+        model.add(Dense(16, input_shape=[input_data.shape[1]], name='layer1'))
+        model.add(Dense(16, name='layer2'))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Dropout(0.1, name='layer3'))
+        model.add(Dense(2, name='layer4'))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Dense(1, name='final_layer'))
+
+        return model
+
+
+    def test_L1out(input_data):
+        model = Sequential()        
+        model.add(Dense(64, input_shape=[input_data.shape[1]], kernel_initializer='he_normal',name='layer1'))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Dropout(0.1, name='layer2'))
+        model.add(Dense(16, kernel_initializer='he_normal',name='layer3'))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Dropout(0.1, name='layer4'))        
+        model.add(Dense(2, kernel_initializer='he_normal',name='layer5'))
+        model.add(LeakyReLU(alpha=0.01))
+        model.add(Dense(1, kernel_initializer='he_normal',name='final_layer'))
         
         return model
     

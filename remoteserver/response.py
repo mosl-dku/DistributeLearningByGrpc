@@ -1,6 +1,12 @@
 from concurrent import futures
 import logging
 
+import tensorflow as tf
+
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth=True
+session=tf.compat.v1.Session(config=config)
+
 import grpc
 
 import service_pb2
@@ -13,18 +19,18 @@ from keras import callbacks
 from sklearn.model_selection import train_test_split
 from keras.models import Model
 from mkmodel import makemodel
-
-
+from keras.utils import plot_model
+from keras.models import load_model
 class layer2_out(service_pb2_grpc.layer2_outServicer):
 
     def request(self, request, context):
         optimizer = optimizers.Adam(0.01)
         early_stop = callbacks.EarlyStopping(monitor='val_mean_squared_logarithmic_error', patience=10)
 
-        EPOCHS = 200
+        EPOCHS = 50
         rmse_result = list()
 
-        data = pd.read_csv('1.csv')
+        data = pd.read_csv('one.csv')
         data =data.dropna(axis=1)
 
         data = data.drop(['DATE'], axis=1)
@@ -36,13 +42,18 @@ class layer2_out(service_pb2_grpc.layer2_outServicer):
         x_train = data
         y_train = x_train.pop('LDL-C')
      
-        model = makemodel.test_base(x_train)
+        model = makemodel.test_layer2(x_train)
+        model.load_weights("weight.h5")
         model.compile(loss='mse', optimizer=optimizer, metrics=['mean_squared_logarithmic_error'])
+        model.fit(x_train,y_train,batch_size=2048,epochs=EPOCHS)
+   
+#        mergedmodel = Model(inputs=model.input, outputs=model.get_layer('layer2').output)
+#        mergedmodel.compile(loss='mse', optimizer=optimizer, metrics=['mean_squared_logarithmic_error'])
+       # mergedmodel.fit(x_train,y_train,batch_size=2048,epochs=EPOCHS)        
 
-        mergedmodel = Model(inputs=model.input, outputs=model.get_layer('layer2').output)
-
-
-        x_train_passed = mergedmodel.predict(x_train)
+        #fullmodel = load_model('full_model.h1')
+        #mergedmodel = Model(inputs=fullmodel.input, outputs=fullmodel.get_layer('layer2').output)
+        x_train_passed = model.predict(x_train)
 
 
         bx = np.array(x_train_passed,dtype=np.float32).tobytes()
@@ -53,7 +64,7 @@ class layer2_out(service_pb2_grpc.layer2_outServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10),options=[('grpc.max_send_message_length', 1024 * 1024 * 200),('grpc.max_receive_message_length', 1024 * 1024 * 200),],)
     service_pb2_grpc.add_layer2_outServicer_to_server(layer2_out(), server)
-    server.add_insecure_port('172.25.244.2:50051')
+    server.add_insecure_port('172.25.244.2:50050')
     server.start()
     server.wait_for_termination()
 
