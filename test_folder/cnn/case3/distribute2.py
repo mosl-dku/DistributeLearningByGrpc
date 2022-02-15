@@ -1,0 +1,120 @@
+import tensorflow as tf
+
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth=True
+session=tf.compat.v1.Session(config=config)
+
+import numpy as np
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import datasets, layers, models
+
+from conmodel import conmodel
+from keras.models import load_model
+from keras.models import Model
+
+
+ 
+cifar10 = datasets.cifar10 
+(train_images, train_labels), (test_images, test_labels) = cifar10.load_data()
+ 
+class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+ 
+print("Train samples:", train_images.shape, train_labels.shape)
+print("Test samples:", test_images.shape, test_labels.shape)
+
+train_images = train_images.reshape((50000, 32, 32, 3))
+train1 = train_images[0:10000]
+train1 = train1.reshape((10000,32,32,3))
+train1 = train1/255.0
+label1 = train_labels[0:10000]
+
+train2 = train_images[10000:20000]
+train2 = train2.reshape((10000,32,32,3))
+train2 = train2/255.0
+label2 = train_labels[10000:20000]
+
+train3 = train_images[20000:30000]
+train3 = train3.reshape((10000,32,32,3))
+train3 = train3/255.0
+label3 = train_labels[20000:30000]
+
+train4 = train_images[30000:40000]
+train4 = train4.reshape((10000,32,32,3))
+train4 = train4/255.0
+label4 = train_labels[30000:40000]
+
+train5 = train_images[40000:50000]
+train5 = train5.reshape((10000,32,32,3))
+train5 = train5/255.0
+label5 = train_labels[40000:50000]
+
+test_images = test_images/255.0
+
+# ###############remote##############
+
+model1 = conmodel.model1_1(train1)
+model1.load_weights('init_weight_soft.h5')
+model1.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model1.fit(train1, label1, epochs =5)
+pred_model1 = Model(inputs=model1.input, outputs = model1.get_layer('max_pooling2d').output)
+train1_passed = pred_model1.predict(train1)
+print("##############train1 finish##############")
+
+model2 = conmodel.model1_1(train2)
+model2.load_weights('init_weight_soft.h5')
+model2.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model2.fit(train2, label2, epochs =5)
+pred_model2 = Model(inputs=model2.input, outputs = model2.get_layer('max_pooling2d_1').output)
+train2_passed = pred_model2.predict(train2)
+print("##############train2 finish##############")
+
+model3 = conmodel.model1_1(train3)
+model3.load_weights('init_weight_soft.h5')
+model3.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model3.fit(train3, label3, epochs =5)
+pred_model3 = Model(inputs=model3.input, outputs = model3.get_layer('max_pooling2d_2').output)
+train3_passed = pred_model3.predict(train3)
+print("##############train3 finish##############")
+
+model4 = conmodel.model1_1(train4)
+model4.load_weights('init_weight_soft.h5')
+model4.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model4.fit(train4, label4, epochs =5)
+pred_model4 = Model(inputs=model4.input, outputs = model4.get_layer('max_pooling2d_3').output)
+train4_passed = pred_model4.predict(train4)
+print("##############train4 finish##############")
+
+model5 = conmodel.model1_1(train5)
+model5.load_weights('init_weight_soft.h5')
+model5.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model5.fit(train5, label5, epochs =5)
+pred_model5 = Model(inputs=model5.input, outputs = model5.get_layer('max_pooling2d_4').output)
+train5_passed = pred_model5.predict(train5)
+print("##############train5 finish##############")
+
+##########################main#####################################################
+
+model_test = conmodel.model1_1(test_images)
+model_test.load_weights('init_weight_soft.h5')
+model_test.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model_test.fit(test_images, test_labels, epochs =5)
+test_passed_model = Model(inputs=model_test.input, outputs = model_test.get_layer('max_pooling2d_5').output)
+test_passed = test_passed_model.predict(test_images)
+print("##############test set finish##############")
+print("##############               ##############")
+print("##############               ##############")
+print("############mainserver train start#########")
+
+merged_train = np.concatenate([train1_passed,train2_passed,train3_passed,train4_passed,train5_passed], axis=0)
+
+model3 = conmodel.model2_2()
+model3.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model3.fit(merged_train, train_labels, epochs=10, validation_data=(test_passed, test_labels))
+
+test_loss, test_acc = model3.evaluate(test_passed, test_labels)
+ 
+print('Test accuracy:', test_acc)
+# predictions = model.predict(test_images)
+
