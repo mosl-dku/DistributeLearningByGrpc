@@ -171,3 +171,7 @@ model을 test하는데에 필요한 test_data를 만드는 function이다.
 ## 5. Running Video
 
 https://user-images.githubusercontent.com/68216852/119236618-6aa89b80-bb73-11eb-89bd-8c46c4e391a6.mp4
+
+## 6. Test Case
+
+
