@@ -175,7 +175,7 @@ https://user-images.githubusercontent.com/68216852/119236618-6aa89b80-bb73-11eb-
 
 ## 6. Test Case
 
-논문에서 사용한 Test case별로 구성한 코드는 test_folder에 기록되어 있으며 사용한 모든 데이터는 기록에는 모두 제외 했음(local에는 데이터가 포함되어 저장되어 있음).
+논문에서 사용한 Test case별로 구성한 코드는 test_folder에 기록되어 있으며 사용한 모든 데이터는 기록에는 모두 제외 했음(local에는 데이터가 포함되어 저장되어 있음: xxx.xxx.xxx.2 PC에 /SplitLearning/include_data).
 
 
 #### 각 폴더의 의미
