@@ -178,15 +178,10 @@ https://user-images.githubusercontent.com/68216852/119236618-6aa89b80-bb73-11eb-
 논문에서 사용한 Test case별로 구성한 코드는 test_folder에 기록되어 있으며 사용한 모든 데이터는 기록에는 모두 제외 했음(local에는 데이터가 포함되어 저장되어 있음).
 
 
-각 폴더의 의미
-
+#### 각 폴더의 의미
 local  : 일반적인 머신러닝 환경으로 모든 data를 하나의 host에서 수행
-
 case_1 : remote host에서 x_train 값에 일정한 vector를 곱하고 main server에 전송
-
 case_2 : remote host에서 일부 layer을 predict 함수로 학습하지않고 통과(필터)한 값을 main server에 전송 
-
 case_3 : remote host에서 일부 layer을 학습시키고 통과 한 값을 main server에 전송
-
 cnn    : 위의 과정을 cifar10 data을 가지고 cnn 학습 수행 
 
