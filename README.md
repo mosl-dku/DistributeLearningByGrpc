@@ -23,7 +23,11 @@ server linux version
 ->Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-70-generic x86_64)
 
 Protobuf version  
-->libprotoc 3.13.0
+->libprotoc 3.13.0  
+
+Tensorflow & keras version
+![123321](https://user-images.githubusercontent.com/68216852/154835586-9b0d65d0-1dcd-4833-b02c-284d9ecc9d21.png)
+
 
 ## 1. Model Architecture
 
