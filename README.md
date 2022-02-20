@@ -189,6 +189,8 @@ local  : 일반적인 머신러닝 환경으로 모든 data를 하나의 host에
 case_1 : remote host에서 x_train 값에 일정한 vector를 곱하고 main server에 전송  
 case_2 : remote host에서 일부 layer을 predict 함수로 학습하지않고 통과(필터)한 값을 main server에 전송   
 case_3 : remote host에서 일부 layer을 학습시키고 통과 한 값을 main server에 전송  
-cnn    : 위의 과정을 cifar10 data을 가지고 cnn 학습 수행
+cnn    : 위의 과정을 cifar10 data을 가지고 cnn 학습 수행  
 
 
+#### 논문  
+D. Lee, J. Lee, H. Jun, H. Kim and S. Yoo, "Triad of Split Learning: Privacy, Accuracy, and Performance," 2021 International Conference on Information and Communication Technology Convergence (ICTC), 2021, pp. 1185-1189, doi: 10.1109/ICTC52510.2021.9620846.
