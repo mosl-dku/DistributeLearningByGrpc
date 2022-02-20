@@ -191,3 +191,4 @@ case_2 : remote host에서 일부 layer을 predict 함수로 학습하지않고 
 case_3 : remote host에서 일부 layer을 학습시키고 통과 한 값을 main server에 전송  
 cnn    : 위의 과정을 cifar10 data을 가지고 cnn 학습 수행
 
+
