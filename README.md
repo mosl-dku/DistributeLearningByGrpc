@@ -25,7 +25,7 @@ server linux version
 Protobuf version  
 ->libprotoc 3.13.0  
 
-Tensorflow & keras version
+Tensorflow & keras version  
 ![123321](https://user-images.githubusercontent.com/68216852/154835586-9b0d65d0-1dcd-4833-b02c-284d9ecc9d21.png)
 
 
